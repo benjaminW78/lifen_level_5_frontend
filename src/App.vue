@@ -13,6 +13,16 @@
             </v-toolbar-items>
             <!--<router-link to="/about" tag="button">About</router-link>-->
         </v-toolbar>
+        <v-alert
+                :value="true"
+                color="info"
+                icon="info"
+                outline
+                dismissible
+        >
+            App hosted on heroku on free instances, you may experience a little delay before backend server wake up from
+            sleep
+        </v-alert>
         <router-view/>
     </v-app>
 </template>
