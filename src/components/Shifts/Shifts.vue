@@ -37,10 +37,17 @@
                 </template>
             </v-data-table>
         </v-layout>
-        <v-layout row>
-            <v-text-field>
+        <v-spacer></v-spacer>
 
-            </v-text-field>
+        <v-layout row align-content-center justify-end xs7 offset-m2 class="customLayout-spacing">
+            <v-spacer></v-spacer>
+
+            <v-text-field
+                    readonly
+                    outline
+                    label="Service fee amount in € for all shifts"
+                    v-model="serviceFee"
+            ></v-text-field>
         </v-layout>
         <ShiftActionMenu v-if="workers && daysMultiplier"/>
         <ShiftCreateForm :daysMultiplicators="daysMultiplier" :workers="workers"/>
@@ -77,6 +84,8 @@
                 daysMultiplier: [],
                 workersStatus: [],
                 workers: [],
+                serviceFee: null,
+
                 headers: [
                     {
                         text: 'Planning ID',
@@ -109,6 +118,7 @@
                         return shifts
                     })
                     .then(async (shifts) => {
+                        this.serviceFee = await request.get('/pricing/fee').then(payload => payload.data.fee)
                         await this.getInfoWorkers()
                         let mappedWorkers
                         if (this.workers) {
@@ -135,7 +145,6 @@
             },
             async getInfoWorkers() {
                 try {
-
                     const [workers, pricingDaysMultiplier, workersStatus] = await Promise.all([request.get('/workers').then(payload => payload.data).catch(err => {}), request.get('/pricing/days').then(payload => payload.data), request.get('/pricing/status').then(payload => payload.data)])
                     this.daysMultiplier = pricingDaysMultiplier
                     this.workersStatus = workersStatus
@@ -157,6 +166,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .customLayout-spacing{
+        margin-top: 2rem!important;
+    }
     h3 {
         margin: 40px 0 0;
     }
