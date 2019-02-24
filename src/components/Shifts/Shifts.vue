@@ -40,14 +40,25 @@
         <v-spacer></v-spacer>
 
         <v-layout row align-content-center justify-end xs7 offset-m2 class="customLayout-spacing">
-            <v-spacer></v-spacer>
+            <v-flex xs3>
+                <v-text-field
+                        readonly
+                        outline
+                        label="Service fee amount in € for all shifts"
+                        :value="serviceFee+ ' €'"
+                        reverse
+                ></v-text-field>
+            </v-flex>
+            <v-flex xs3>
+                <v-text-field
+                        readonly
+                        outline
+                        label="Total shift amount in €"
+                        reverse
 
-            <v-text-field
-                    readonly
-                    outline
-                    label="Service fee amount in € for all shifts"
-                    v-model="serviceFee"
-            ></v-text-field>
+                        :value="shifts.reduce((acc,shift)=>{return acc+=shift.shift_price},0) + ' €'"
+                ></v-text-field>
+            </v-flex>
         </v-layout>
         <ShiftActionMenu v-if="workers && daysMultiplier"/>
         <ShiftCreateForm :daysMultiplicators="daysMultiplier" :workers="workers"/>
@@ -166,9 +177,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .customLayout-spacing{
-        margin-top: 2rem!important;
+    .customLayout-spacing {
+        margin-top: 2rem !important;
     }
+
     h3 {
         margin: 40px 0 0;
     }
