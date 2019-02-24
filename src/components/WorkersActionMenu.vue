@@ -25,12 +25,12 @@
                     dark
                     small
                     color="green"
-                    @click="createNewShift"
+                    @click="createNewWorker"
                     slot="activator"
             >
                 <v-icon>person_add</v-icon>
             </v-btn>
-            <span>create new shift</span>
+            <span>create new worker</span>
         </v-tooltip>
     </v-speed-dial>
 </template>
@@ -45,9 +45,9 @@
             }
         },
         methods: {
-            createNewShift() {
+            createNewWorker() {
                 this.$root.$emit('showCreateWorkerDialog', true)
-                this.trigger= false
+                this.trigger = false
 
             }
         }
