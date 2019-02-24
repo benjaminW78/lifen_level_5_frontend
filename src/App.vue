@@ -1,28 +1,18 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-app>
+        <v-toolbar color="primary">
+            <v-toolbar-title class="text-uppercase text--primary">Hospital shifts scheduler</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <!--<router-link to="/" tag="button">Home</router-link>-->
+
+            <v-toolbar-items class="hidden-xs-only">
+                <v-btn flat @click="$router.push('/')">Shifts management</v-btn>
+                <v-btn flat @click="$router.push('/workers')">Workers management</v-btn>
+
+
+            </v-toolbar-items>
+            <!--<router-link to="/about" tag="button">About</router-link>-->
+        </v-toolbar>
+        <router-view/>
+    </v-app>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
