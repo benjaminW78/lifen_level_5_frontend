@@ -18,7 +18,7 @@
 This project is the frontend part of the lifen test level5
 It's created with `vue-cli v3.0` and deployed on heroku.
 
-This is a full working Single Page Application which allow you to manage workers and shifts and to know the service fee and total fee for every programmed fee
+This is a full working Single Page Application which allow you to manage workers and shifts and to know the service fee and total fee for every gprogrammed shifts
 
 ## Features
 
