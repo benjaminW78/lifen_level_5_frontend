@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Shifts from '../components/Shifts'
+    import Shifts from '../components/Shifts/Shifts'
 
     export default {
         components: {

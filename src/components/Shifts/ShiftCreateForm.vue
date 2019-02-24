@@ -16,30 +16,40 @@
                         <v-layout wrap>
 
                             <v-flex xs12>
-                                <v-text-field
-                                        label="Name"
-                                        v-model="name"
-                                ></v-text-field>
+                                <v-date-range v-model="range" style="display: grid" :value="{}"
+                                              display-format="DD-MM-YYYY"></v-date-range>
                             </v-flex>
+
+                            <!--<v-flex xs12 sm6 md4>-->
+                            <!--<v-datetime-picker-->
+                            <!--required-->
+                            <!--label="Select start date/time for this shift"-->
+                            <!--v-model="start_date"-->
+                            <!--:click="updateEndDate"></v-datetime-picker>-->
+                            <!--</v-flex>-->
+                            <!--<v-flex xs12 sm6 md4>-->
+                            <!--<v-datetime-picker-->
+                            <!--required-->
+                            <!--label="Select end date/time for this shift"-->
+                            <!--v-model="end_date"></v-datetime-picker>-->
+
+                            <!--</v-flex>-->
                             <v-flex xs12>
                                 <v-select
-                                        v-model="status"
-                                        :items="workersStatus"
+                                        v-model="worker"
+                                        :items="workers"
                                         :item-text="text"
                                         item-value="abbr"
-                                        label="Select status for this worker*"
+                                        label="Select worker for this shift *"
                                         required
                                         persistent-hint
                                         return-object
-                                        @change="shiftPricePerDay=status.shift_price"
                                         single-line
                                 ></v-select>
                             </v-flex>
                             <v-flex xs12>
-                                <v-text-field
-                                        label="Price per day (can be changed)"
-                                        v-model="shiftPricePerDay"
-                                ></v-text-field>
+                                <v-checkbox label="allow overlap with others shifts *" required
+                                            v-model="overlap" @change="error=null"></v-checkbox>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -51,7 +61,7 @@
                     <v-btn color="blue darken-1" flat @click="()=>{clean();dialog = false}">Close
                     </v-btn>
                     <v-btn color="blue darken-1" flat @click="submit"
-                           :disabled="!name||!status||!shiftPricePerDay">
+                           :disabled="!worker||!range.start||!range.end">
                         Save
                     </v-btn>
                 </v-card-actions>
@@ -61,53 +71,56 @@
 </template>
 <script>
     import axios from 'axios'
-    import Configuration from '../configuration'
+    import Configuration from '../../configuration'
 
     const request = new axios.create({
         baseURL: Configuration.service.backendUrl
     })
 
     export default {
-        name: 'WorkerCreateForm',
+        name: 'ShiftsCreateForm',
         data() {
             return {
                 data: [],
                 dialog: false,
-                error: null,
-                shiftPricePerDay: null,
-                status: null,
-                name: null,
-                worker: null
-
+                worker: null,
+                overlap: false,
+                range: {},
+                duration: null,
+                error: null
             }
         },
         props: {
-            workersStatus: Array
+            daysMultiplicators: Array,
+            workers: Array
         },
         mounted() {
-            this.$root.$on('showCreateWorkerDialog', data => this.dialog = data)
+            this.$root.$on('showCreateShiftDialog', data => this.dialog = data)
         },
 
         methods: {
+            text: item => item.first_name + ' — ' + item.status,
             clean() {
-                this.shiftPricePerDay = null
-                this.status = null
-                this.name = null
+                this.worker = null
+                this.range = {}
+                this.overlap = false
                 this.error = null
+                this.$forceUpdate()
             },
-            text: item => item.name,
-
             submit(event) {
                 event.preventDefault()
-                if (this.name && this.status && this.shiftPricePerDay) {
+                if (this.range && this.range.end && this.range.start && this.worker) {
+
                     const payload = {
-                        first_name: this.name,
-                        status: this.status.name,
-                        shift_price_per_day: this.shiftPricePerDay
+                        start_date: this.range.start,
+                        end_date: this.range.end,
+                        user_id: this.worker._id,
+                        allow_overlap: this.overlap,
+                        basic_price_per_day: this.worker.shift_price_per_day
                     }
-                    request.post('/workers', payload).then(() => {
+                    request.post('/shifts', payload).then(() => {
                         this.dialog = false
-                        this.$root.$emit('updateWorkersList', true)
+                        this.$root.$emit('updateShiftList', true)
                         this.clean()
                     }).catch(err => {
                         if (err.response.data) {

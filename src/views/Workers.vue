@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Workers from '../components/Workers'
+    import Workers from '../components/Workers/Workers'
 
     export default {
         components: {

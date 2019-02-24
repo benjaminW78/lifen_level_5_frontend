@@ -37,6 +37,11 @@
                 </template>
             </v-data-table>
         </v-layout>
+        <v-layout row>
+            <v-text-field>
+
+            </v-text-field>
+        </v-layout>
         <ShiftActionMenu v-if="workers && daysMultiplier"/>
         <ShiftCreateForm :daysMultiplicators="daysMultiplier" :workers="workers"/>
     </v-container>
@@ -46,7 +51,7 @@
 <script>
     import axios from 'axios'
     import moment from 'moment'
-    import Configuration from '../configuration'
+    import Configuration from '../../configuration'
     import ShiftActionMenu from './ShiftActionMenu'
     import ShiftCreateForm from './ShiftCreateForm'
 

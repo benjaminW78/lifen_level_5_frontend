@@ -46,7 +46,7 @@
     import WorkerCreateForm from './WorkerCreateForm'
 
     import axios from 'axios'
-    import Configuration from '../configuration'
+    import Configuration from '../../configuration'
 
     const request = new axios.create({
         baseURL: Configuration.service.backendUrl
